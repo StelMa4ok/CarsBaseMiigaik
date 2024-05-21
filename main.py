@@ -6,9 +6,11 @@ from fastapi import FastAPI
 from config import DATABASE_NAME
 from src.auth.db import Base as AuthBase
 from src.auto.models import Base as AutoBase
+from src.rating.models import Base as RatingBase
 from src.auth.manager import fastapi_users, auth_backend
 from src.auth.schemas import UserRead, UserCreate
 from src.auto.router import router as auto_router
+from src.rating.router import router as rating_router
 from start_scripts import create_tables, create_db
 
 app = FastAPI()
@@ -23,12 +25,14 @@ app.include_router(
 )
 
 app.include_router(auto_router)
+app.include_router(rating_router)
 
 if __name__ == "__main__":
     create_db(DATABASE_NAME)
     asyncio.run(create_tables(
         AuthBase.metadata,
-        AutoBase.metadata
+        AutoBase.metadata,
+        RatingBase.metadata
     ))
 
-    uvicorn.run("main:app", host="127.0.0.1", log_level="info")
+    uvicorn.run("main:app", host="127.0.0.1", port=8001, log_level="info")

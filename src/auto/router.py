@@ -37,17 +37,17 @@ async def create_auto(
         'id': auto.id,
         'creator': auto.creator,
         'model': auto.model,
-        'photo': auto.photo
+        'photo': str(auto.photo)
     }
 
 
 @router.get("/all", response_model=list[AutoResponseSchema])
-async def all_auto(user: User = Depends(current_user)):
+async def all_auto():
     return await db_controller.get_autos()
 
 
 @router.get("/{auto_id}", response_model=AutoResponseSchema)
-async def get_auto(auto_id: UUID, user: User = Depends(current_user)):
+async def get_auto(auto_id: UUID):
     res = await db_controller.get_auto(auto_id)
 
     if not res:
