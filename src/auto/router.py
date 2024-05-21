@@ -19,6 +19,9 @@ db_controller = DBController()
 @router.post("/create", response_model=AutoResponseSchema)
 async def create_auto(
         model: str = Form(...),
+        car_make: str = Form(...),
+        year: int = Form(...),
+        gis_number: str = Form(...),
         file: UploadFile = File(...),
         user: User = Depends(current_user)
 ):
@@ -29,6 +32,9 @@ async def create_auto(
     payload = {
         'creator': user.id,
         'model': model,
+        'car_make': car_make,
+        'year': year,
+        'gis_number': gis_number,
         'photo': await file.read()
     }
 
@@ -37,6 +43,9 @@ async def create_auto(
         'id': auto.id,
         'creator': auto.creator,
         'model': auto.model,
+        'car_make': auto.car_make,
+        'year': auto.year,
+        'gis_number': auto.gis_number,
         'photo': str(auto.photo)
     }
 
@@ -65,13 +74,19 @@ async def delete_auto(auto_id: UUID, user: User = Depends(current_user)):
 async def update_auto(
         auto_id: UUID,
         model: str = Form(...),
+        car_make: str = Form(...),
+        year: int = Form(...),
+        gis_number: str = Form(...),
         file: UploadFile = File(...),
         user: User = Depends(current_user)
 ):
     payload = {
+        'creator': user.id,
         'model': model,
+        'car_make': car_make,
+        'year': year,
+        'gis_number': gis_number,
         'photo': await file.read(),
-        'creator': user.id
     }
     res = await db_controller.update_auto(auto_id, payload)
     if not res:

@@ -28,6 +28,9 @@ class DBController:
             'id': auto[0].id,
             'creator': auto[0].creator,
             'model': auto[0].model,
+            'car_make': auto[0].car_make,
+            'year': auto[0].year,
+            'gis_number': auto[0].gis_number,
             'photo': str(auto[0].photo)
         } for auto in res.fetchall()]
 
@@ -41,6 +44,9 @@ class DBController:
             'id': row[0].id,
             'creator': row[0].creator,
             'model': row[0].model,
+            'car_make': row[0].car_make,
+            'year': row[0].year,
+            'gis_number': row[0].gis_number,
             'photo': str(row[0].photo)
         }
 
@@ -56,5 +62,8 @@ class DBController:
             'id': row[0].id,
             'creator': row[0].creator,
             'model': row[0].model,
+            'car_make': row[0].car_make,
+            'year': row[0].year,
+            'gis_number': row[0].gis_number,
             'photo': str(row[0].photo)
         }

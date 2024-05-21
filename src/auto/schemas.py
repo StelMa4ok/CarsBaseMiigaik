@@ -8,6 +8,9 @@ class AutoResponseSchema(BaseModel):
     id: UUID
     creator: UUID
     model: str
+    car_make: str
+    year: int
+    gis_number: str
     photo: str
 
 
