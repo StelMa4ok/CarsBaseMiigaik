@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+
+    stages {
+        stage("Get project") {
+            steps {
+                git "https://github.com/StelMa4ok/CarsBaseMiigaik.git"
+            }
+
+        }
+
+        stage("Start project") {
+            steps {
+                script {
+                sh """
+                docker rm -f cars-base-container
+                docker rmi cars-base-image
+
+                docker compose build cars-base-service
+                docker run -d \
+                      --name cars-base-container \
+                      -p 8000:8000 \
+                      cars-base-image
+                """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
