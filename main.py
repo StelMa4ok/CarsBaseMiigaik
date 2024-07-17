@@ -3,7 +3,7 @@ import asyncio
 import uvicorn
 from fastapi import FastAPI
 
-from config import DATABASE_NAME, HOST, PORT
+from config import DATABASE_NAME
 from src.auth.db import Base as AuthBase
 from src.auto.models import Base as AutoBase
 from src.rating.models import Base as RatingBase
@@ -35,4 +35,4 @@ if __name__ == "__main__":
         RatingBase.metadata
     ))
 
-    uvicorn.run("main:app", host=HOST, port=PORT)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="info")
