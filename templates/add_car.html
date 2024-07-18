@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+Добавить автомобиль
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-sm-12">
+      <h2 class="mb-4">Добавить автомобиль</h2>
+
+      <form id="car-form" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="model" class="form-label">Модель:</label>
+          <input type="text" class="form-control" id="model" name="model" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="car_make" class="form-label">Марка:</label>
+          <input type="text" class="form-control" id="car_make" name="car_make" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="year" class="form-label">Год выпуска:</label>
+          <select class="form-select" id="year" name="year" required>
+            {% for year in range(current_year, 1969, -1) %}
+              <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="gis_number" class="form-label">Гос. номер:</label>
+          <input type="text" class="form-control" id="gis_number" name="gis_number" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="file" class="form-label">Фотография:</label>
+          <input type="file" class="form-control" id="file" name="file" accept="image/jpeg" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Добавить автомобиль</button>
+      </form>
+
+      <div id="response-message" class="mt-3"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('car-form');
+  const responseMessage = document.getElementById('response-message');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('/auto/create', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        responseMessage.textContent = 'Автомобиль успешно добавлен!';
+        form.reset();
+      } else {
+        const data = await response.json();
+        responseMessage.textContent = `Ошибка: ${data.detail}`;
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке запроса:', error);
+      responseMessage.textContent = 'Произошла ошибка при добавлении автомобиля.';
+    }
+  });
+</script>
+{% endblock %}

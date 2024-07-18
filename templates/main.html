@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+Главная
+{% endblock %}
+
+{% block content %}
+
+{% if not user %}
+<div class="auth" style="margin-top: 3%">
+  <a href="/login" class="btn btn-primary">Войти</a>
+  <a href="/login" class="btn btn-primary">Регистрация</a>
+</div>
+{% else %}
+<div class="auth" style="margin-top: 3%">
+  <a href="/add-car" class="btn btn-success">Добавить машину</a>
+</div>
+{% endif %}
+
+<div class="container mt-5">
+  <div class="row">
+    {% for auto in auto_list %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <img src="data:image/jpeg;base64,{{ auto.photo }}" class="card-img-top" alt="{{ auto.model }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ auto.model }} {{ auto.car_make }}</h5>
+          {% if auto.average_rating %}
+          <h6 class="card-subtitle mb-2 text-muted">Рейтинг: {{ auto.average_rating }}/5</h6>
+          {% else %}
+          <h6 class="card-subtitle mb-2 text-muted">Рейтинг: нет отзывов</h6>
+          {% endif %}
+          <p class="card-text">
+            Автор: <a href="mailto:{{ auto.creator }}">{{ auto.creator }}</a> <br>
+            Год выпуска: {{ auto.year }}<br>
+            Гос. номер: {{ auto.gis_number }}
+          </p>
+
+          <div class="links" style="bottom: 0">
+            <a href="/feedback/{{auto.id}}" class="card-link">Оставить отзыв</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.row {
+  display: flex;
+}
+
+.col-md-4 {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.links {
+  margin-top: auto;
+}
+</style>
+{% endblock %}

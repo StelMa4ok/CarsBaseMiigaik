@@ -52,12 +52,17 @@ async def create_auto(
 
 @router.get("/all", response_model=list[AutoResponseSchema])
 async def all_auto():
-    return await db_controller.get_autos()
+    autos = await db_controller.get_autos()
+    for i in range(len(autos)):
+        autos[i]["photo"] = str(autos[i]["photo"])
+
+    return autos
 
 
 @router.get("/{auto_id}", response_model=AutoResponseSchema)
 async def get_auto(auto_id: UUID):
     res = await db_controller.get_auto(auto_id)
+    res["photo"] = str(res["photo"])
 
     if not res:
         raise HTTPException(status_code=404, detail="Not found")

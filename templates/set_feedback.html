@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+Оставить отзыв
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Оставить отзыв</h2>
+
+      <form id="review-form">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Ваша оценка:</label>
+          <select class="form-select" id="rating" name="rating" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="comment" class="form-label">Ваш комментарий:</label>
+          <textarea class="form-control" id="comment" name="comment" rows="5"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+      </form>
+      <div id="response-message"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('review-form');
+  const responseMessage = document.getElementById('response-message');
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const rating = document.getElementById('rating').value;
+    const comment = document.getElementById('comment').value;
+
+    const currentUrl = window.location.href;
+    const urlParts = currentUrl.split('/');
+    const autoId = urlParts[urlParts.length - 1];
+
+    try {
+      const response = await fetch("/rating/create", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          auto: autoId,
+          rating: rating,
+          comment: comment
+        })
+      });
+
+      if (response.ok) {
+        responseMessage.textContent = 'Отзыв успешно отправлен!';
+        form.reset();
+      } else {
+        const data = await response.json();
+        responseMessage.textContent = `Ошибка: ${data.detail}`;
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке запроса:', error);
+      responseMessage.textContent = 'Произошла ошибка при отправке отзыва.';
+    }
+  });
+</script>
+{% endblock %}

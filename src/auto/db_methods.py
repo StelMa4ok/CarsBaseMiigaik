@@ -31,7 +31,7 @@ class DBController:
             'car_make': auto[0].car_make,
             'year': auto[0].year,
             'gis_number': auto[0].gis_number,
-            'photo': str(auto[0].photo)
+            'photo': auto[0].photo
         } for auto in res.fetchall()]
 
     async def get_auto(self, auto_id: UUID) -> dict[str, Any]:
